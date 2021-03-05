@@ -248,7 +248,7 @@ public class TeleOpControls {
                 }
             } else if (pushStep == PushStep.STEP_TWO) {
                 robotHardware.pusher.setPosition(constants.pusherOut);
-                if (pusherTimer.milliseconds() > 600)
+                if (pusherTimer.milliseconds() > 200)
                     pushStep = PushStep.NOT_MOVING;
             } else
                 robotHardware.pusher.setPosition(constants.pusherOut);

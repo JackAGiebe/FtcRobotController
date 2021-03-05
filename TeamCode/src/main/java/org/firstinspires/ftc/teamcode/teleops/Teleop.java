@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.autonomationizing.NewWorldPosition;
 import org.firstinspires.ftc.teamcode.autonomationizing.TeleOpControls;
 import org.firstinspires.ftc.teamcode.autonomationizing.WorldPosition;
 import org.firstinspires.ftc.teamcode.enums.IntakeStatus;
@@ -21,7 +22,8 @@ public class Teleop extends LinearOpMode {
     RobotHardware robotHardware = new RobotHardware(this, telemetry);
     Constants constants = new Constants();
     TeleOpControls teleOpControls = new TeleOpControls(robotHardware, this);
-    WorldPosition worldPosition = new WorldPosition(0, 0, 0, robotHardware, this);
+    NewWorldPosition newWorldPosition = new NewWorldPosition(0, 0, 0, robotHardware, this);
+//    WorldPosition worldPosition = new WorldPosition(0, 0, 0, robotHardware, this);
 
     /*
     Drive controls are left stick and triggers.
@@ -45,11 +47,13 @@ public class Teleop extends LinearOpMode {
             teleOpControls.shooterControls();
             teleOpControls.intakeControls();
             teleOpControls.wobbleControls();
+            newWorldPosition.giveEncoderHardwareCalls(robotHardware.leftEncoder.getCurrentPosition(), robotHardware.rightEncoder.getCurrentPosition(), robotHardware.normalEncoder.getCurrentPosition());
+            newWorldPosition.updateWorldPosition();
 
-            telemetry.addData("Power", robotHardware.shooter1.getPower());
-            telemetry.addData("Velocity", robotHardware.shooter1.getVelocity());
-            telemetry.addData("Target Velocity", teleOpControls.getShootVelocity());
-            telemetry.addData("UpTickPressed", teleOpControls.tickUpPressed);
+
+            telemetry.addData("X", newWorldPosition.getxPosition());
+            telemetry.addData("Y", newWorldPosition.getyPosition());
+            telemetry.addData("Angle", newWorldPosition.getAngleDegrees());
             telemetry.update();
         }
     }

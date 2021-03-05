@@ -12,7 +12,7 @@ public class Constants {
     public double wheelDiameter = 2, wheelCircumference = wheelDiameter * Math.PI;
     public double countsPerInch = 8192 / wheelCircumference;
 
-    public double wheelBaseSeperation = 14, normalDifferenceRadians = 11000/Math.PI;
+    public double wheelBaseSeperation = 15.05, normalDifferenceRadians = 10800/Math.PI;
 
     public double wobbleSecureOpen = .5, wobbleSecureClosed = 0;
     public double wobble1Holding = .7, wobble1Front = .05, wobble1Back = .85, wobble2Holding = 0.3, wobble2Front = .95, wobble2Back = .15;
