@@ -50,7 +50,6 @@ public class Teleop extends LinearOpMode {
             newWorldPosition.giveEncoderHardwareCalls(robotHardware.leftEncoder.getCurrentPosition(), robotHardware.rightEncoder.getCurrentPosition(), robotHardware.normalEncoder.getCurrentPosition());
             newWorldPosition.updateWorldPosition();
 
-
             telemetry.addData("X", newWorldPosition.getxPosition());
             telemetry.addData("Y", newWorldPosition.getyPosition());
             telemetry.addData("Angle", newWorldPosition.getAngleDegrees());

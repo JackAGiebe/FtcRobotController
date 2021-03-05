@@ -134,8 +134,8 @@ public class TeleOpControls {
 
         if(shooting){
             if(angleUp) {
-                robotHardware.shooter1.setVelocity(constants.shootHighVelocity - 20);
-                robotHardware.shooter2.setVelocity(constants.shootHighVelocity - 20);
+                robotHardware.shooter1.setVelocity(constants.shootHighVelocity);
+                robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
             }
             else{
                 robotHardware.shooter1.setVelocity(constants.shootLowVelocity);
