@@ -25,7 +25,6 @@ public class RobotHardware {
 
     public Servo wobbleSecure, wobble1, wobble2;
     public Servo hopper1, hopper2;
-    public Servo angleAdjust;
     public Servo pusher;
 
     public BNO055IMU imu;
@@ -43,7 +42,6 @@ public class RobotHardware {
     public String intake1Name = "intake1", intake2Name = "intake2";
     public String wobbleSecureName = "wobbleSecure", wobble1Name = "wobble1", wobble2Name = "wobble2";
     public String hopper1Name = "hopper1", hopper2Name = "hopper2";
-    public String angleAdjustName = "angleAdjust";
     public String pusherName = "pusher";
 
     //Constructer
@@ -84,8 +82,6 @@ public class RobotHardware {
         hopper1 = hardwareMap.get(Servo.class, hopper1Name);
         hopper2 = hardwareMap.get(Servo.class, hopper2Name);
 
-        angleAdjust = hardwareMap.get(Servo.class, angleAdjustName);
-
         pusher = hardwareMap.get(Servo.class, pusherName);
 
         leftEncoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -122,11 +118,11 @@ public class RobotHardware {
         backLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        shooter1.setDirection(DcMotorSimple.Direction.FORWARD);
-        shooter2.setDirection(DcMotorSimple.Direction.FORWARD);
+        shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        intake1.setDirection(DcMotorSimple.Direction.REVERSE);
-        intake2.setDirection(DcMotorSimple.Direction.REVERSE);
+        intake1.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake2.setDirection(DcMotorSimple.Direction.FORWARD);
 
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -180,7 +176,6 @@ public class RobotHardware {
         wobble2.setPosition(constants.wobble2Back);
         hopper1.setPosition(constants.hopper1Down);
         hopper2.setPosition(constants.hopper2Down);
-        angleAdjust.setPosition(constants.angleAdjustLow);
         pusher.setPosition(constants.pusherOut);
     }
 

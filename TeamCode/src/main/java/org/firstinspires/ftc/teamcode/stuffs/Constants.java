@@ -18,10 +18,9 @@ public class Constants {
     public double wobble1Holding = .7, wobble1Front = .05, wobble1Back = .85, wobble2Holding = 0.3, wobble2Front = .95, wobble2Back = .15;
     public double wobble1LeanForward = 0.5, wobble2LeanForward = 0.5;
     public double hopper1Down = .2, hopper2Down = .8, hopper1Up = 0.565, hopper2Up = 0.435;
-    public double angleAdjustLow = .5, angleAdjustHigh = .8;
     public double pusherIn = 0, pusherOut = 0.29;
     public double shotPower = .8, shotVelocity = 1500;
-    public double shootHighVelocity = 1800, shootLowVelocity = 1500;
+    public double shootHighVelocity = 1860, shootLowVelocity = 1500;
     public double shootHighPower = 1, shootLowPower = .875;
     public double intakePower = 1;
 

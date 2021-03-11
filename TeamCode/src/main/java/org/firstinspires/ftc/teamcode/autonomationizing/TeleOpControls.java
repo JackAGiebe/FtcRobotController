@@ -181,10 +181,6 @@ public class TeleOpControls {
         else if(angleDownPressed)
             angleUp = false;
 
-        if(angleUp)
-            robotHardware.angleAdjust.setPosition(constants.angleAdjustHigh);
-        else
-            robotHardware.angleAdjust.setPosition(constants.angleAdjustLow);
 
         //hopper controls
         if(!hopperHeld){
@@ -223,7 +219,7 @@ public class TeleOpControls {
         if(angleUp) {
             if (!pushHeld) {
                 if (op.gamepad1.x) {
-                    if (robotHardware.shooter1.getVelocity() >= constants.shootHighVelocity - 20 && pushStep == PushStep.NOT_MOVING) {
+                    if (robotHardware.shooter1.getVelocity() >= constants.shootHighVelocity && pushStep == PushStep.NOT_MOVING) {
                         pushPressed = true;
                         pushHeld = false;
                     }
@@ -242,13 +238,13 @@ public class TeleOpControls {
 
             if (pushStep == PushStep.STEP_ONE) {
                 robotHardware.pusher.setPosition(constants.pusherIn);
-                if (pusherTimer.milliseconds() > 200) {
+                if (pusherTimer.milliseconds() > 150) {
                     pushStep = PushStep.STEP_TWO;
                     pusherTimer.reset();
                 }
             } else if (pushStep == PushStep.STEP_TWO) {
                 robotHardware.pusher.setPosition(constants.pusherOut);
-                if (pusherTimer.milliseconds() > 200)
+                if (pusherTimer.milliseconds() > 150)
                     pushStep = PushStep.NOT_MOVING;
             } else
                 robotHardware.pusher.setPosition(constants.pusherOut);

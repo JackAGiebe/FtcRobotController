@@ -29,7 +29,6 @@ public class AutonFunctions {
     public void prepShootHighGoal(){
         robotHardware.shooter1.setVelocity(constants.shootHighVelocity);
         robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
-        robotHardware.angleAdjust.setPosition(constants.angleAdjustHigh);
         robotHardware.hopper1.setPosition(constants.hopper1Up);
         robotHardware.hopper2.setPosition(constants.hopper2Up);
     }
@@ -41,7 +40,6 @@ public class AutonFunctions {
 //        robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
 //        robotHardware.hopper1.setPosition(constants.hopper1Up);
 //        robotHardware.hopper2.setPosition(constants.hopper2Up);
-//        robotHardware.angleAdjust.setPosition(constants.angleAdjustHigh);
 //
 //        if(shotsFired < 3) {
 //            if(pushStep == PushStep.NOT_MOVING) {
@@ -79,7 +77,6 @@ public class AutonFunctions {
         robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
         robotHardware.hopper1.setPosition(constants.hopper1Up);
         robotHardware.hopper2.setPosition(constants.hopper2Up);
-        robotHardware.angleAdjust.setPosition(constants.angleAdjustHigh);
 
         if(pushStep == PushStep.NOT_MOVING) {
             robotHardware.pusher.setPosition(constants.pusherOut);
@@ -110,7 +107,6 @@ public class AutonFunctions {
         robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
         robotHardware.hopper1.setPosition(constants.hopper1Up);
         robotHardware.hopper2.setPosition(constants.hopper2Up);
-        robotHardware.angleAdjust.setPosition(constants.angleAdjustLow);
 
         if(pushStep == PushStep.NOT_MOVING) {
             robotHardware.pusher.setPosition(constants.pusherOut);
