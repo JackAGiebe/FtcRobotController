@@ -242,11 +242,13 @@ public class TeleOpControls {
                     pushStep = PushStep.STEP_TWO;
                     pusherTimer.reset();
                 }
-            } else if (pushStep == PushStep.STEP_TWO) {
+            }
+            else if (pushStep == PushStep.STEP_TWO) {
                 robotHardware.pusher.setPosition(constants.pusherOut);
                 if (pusherTimer.milliseconds() > 150)
                     pushStep = PushStep.NOT_MOVING;
-            } else
+            }
+            else
                 robotHardware.pusher.setPosition(constants.pusherOut);
         }
         else {
