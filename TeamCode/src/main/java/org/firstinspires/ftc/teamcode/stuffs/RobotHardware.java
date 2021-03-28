@@ -29,8 +29,6 @@ public class RobotHardware {
 
     public BNO055IMU imu;
 
-    Telemetry telemetry;
-
     LinearOpMode op;
 
     Constants constants = new Constants();
@@ -44,19 +42,14 @@ public class RobotHardware {
     public String hopper1Name = "hopper1", hopper2Name = "hopper2";
     public String pusherName = "pusher";
 
-    //Constructer
-    public RobotHardware(LinearOpMode op, Telemetry telemetry){
+    //Constructor
+    public RobotHardware(LinearOpMode op){
         this.op = op;
-        this.telemetry = telemetry;
     }
 
-    /**
-     * Init the robot
-     * @param hardwareMap
-     * @param initServos
-     * @param initIMU
-     */
-    public void init(HardwareMap hardwareMap, boolean initServos, boolean initIMU){
+
+    //init
+    public void init(HardwareMap hardwareMap, boolean initServos){
         this.hardwareMap = hardwareMap;
 
         frontLeft = hardwareMap.get(DcMotor.class, flName);
@@ -121,7 +114,7 @@ public class RobotHardware {
         shooter1.setDirection(DcMotorSimple.Direction.REVERSE);
         shooter2.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        intake1.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake1.setDirection(DcMotorSimple.Direction.REVERSE);
         intake2.setDirection(DcMotorSimple.Direction.FORWARD);
 
         frontLeft.setPower(0);
@@ -136,50 +129,35 @@ public class RobotHardware {
         intake2.setPower(0);
 
 //        shooter1 = (DcMotorEx) shooter1PreCast;
-
-        if(initIMU)
-            initIMU(hardwareMap);
+//
+//        if(initIMU)
+//            initIMU(hardwareMap);
 
         if(initServos)
             initServos();
-
-        telemetry.addLine("Yeet");
-        telemetry.update();
     }
 
-    /**
-     * Init the imu if we doing that
-     * @param hardwareMap
-     */
-    public void initIMU(HardwareMap hardwareMap){
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNo055IMUCalibration.json";
-        parameters.loggingEnabled = true;
-        parameters.loggingTag = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+    //init imu except we don't
+//    public void initIMU(HardwareMap hardwareMap){
+//        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+//        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+//        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+//        parameters.calibrationDataFile = "BNo055IMUCalibration.json";
+//        parameters.loggingEnabled = true;
+//        parameters.loggingTag = "IMU";
+//        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+//
+//        imu = hardwareMap.get(BNO055IMU.class, "imu");
+//        imu.initialize(parameters);
+//    }
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-    }
-
-    /**
-     * Init servos if we doing that
-     */
+    //init servos if we do that
     public void initServos(){
         wobbleSecure.setPosition(constants.wobbleSecureClosed);
         wobble1.setPosition(constants.wobble1Back);
         wobble2.setPosition(constants.wobble2Back);
         hopper1.setPosition(constants.hopper1Down);
         hopper2.setPosition(constants.hopper2Down);
-        pusher.setPosition(constants.pusherOut);
-    }
-
-    public void autonStart(){
-        wobbleSecure.setPosition(constants.wobbleSecureClosed);
-        wobble1.setPosition(constants.wobble1Holding);
-        wobble2.setPosition(constants.wobble2Holding);
         pusher.setPosition(constants.pusherOut);
     }
 
@@ -194,46 +172,46 @@ public class RobotHardware {
         }
     }
 
-    public double currentVelocity, error;
-    public double cumulativeError, lastError = 0;
-    public double proportional, integral, derivative;
-    boolean killDerivative, killIntegral;
-    public double shooterPower;
-    public double p;
-    public void
-    setShooterVelocity(double velocity, double p, double i, double d){
-        this.p = p;
-        currentVelocity = shooter1.getVelocity();
-        error = velocity - currentVelocity;
-
-        if((lastError < velocity && error > velocity) || (lastError > velocity && error < velocity) || error == 0){
-            killIntegral = true;
-            killDerivative = true;
-        }
-        else{
-            killIntegral = false;
-            killDerivative = false;
-        }
-
-        if(Math.abs(error) > constants.integralActiveZone){
-            killIntegral = true;
-        }
-
-        proportional = error * p;
-
-        if(killIntegral)
-            cumulativeError = 0;
-        else
-            integral = cumulativeError * i;
-
-        if(!killDerivative)
-            derivative = (error - lastError) * d;
-
-        lastError = error;
-
-        shooterPower = proportional + integral + derivative;
-
-        shooter1.setPower(shooterPower);
-        shooter2.setPower(shooterPower);
-    }
+//    public double currentVelocity, error;
+//    public double cumulativeError, lastError = 0;
+//    public double proportional, integral, derivative;
+//    boolean killDerivative, killIntegral;
+//    public double shooterPower;
+//    public double p;
+//    public void
+//    setShooterVelocity(double velocity, double p, double i, double d){
+//        this.p = p;
+//        currentVelocity = shooter1.getVelocity();
+//        error = velocity - currentVelocity;
+//
+//        if((lastError < velocity && error > velocity) || (lastError > velocity && error < velocity) || error == 0){
+//            killIntegral = true;
+//            killDerivative = true;
+//        }
+//        else{
+//            killIntegral = false;
+//            killDerivative = false;
+//        }
+//
+//        if(Math.abs(error) > constants.integralActiveZone){
+//            killIntegral = true;
+//        }
+//
+//        proportional = error * p;
+//
+//        if(killIntegral)
+//            cumulativeError = 0;
+//        else
+//            integral = cumulativeError * i;
+//
+//        if(!killDerivative)
+//            derivative = (error - lastError) * d;
+//
+//        lastError = error;
+//
+//        shooterPower = proportional + integral + derivative;
+//
+//        shooter1.setPower(shooterPower);
+//        shooter2.setPower(shooterPower);
+//    }*/
 }

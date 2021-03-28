@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomationizing;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,14 +15,12 @@ public class RobotMovement {
     private double drive, strafe, rotate;
 
     OpMode op;
-    Telemetry telemetry;
     RobotHardware robotHardware;
     MathFunctions mathFunctions = new MathFunctions();
     WorldPosition worldPosition;
 
-    public RobotMovement(LinearOpMode op, Telemetry telemetry, RobotHardware robotHardware, WorldPosition worldPosition){
+    public RobotMovement(LinearOpMode op, RobotHardware robotHardware, WorldPosition worldPosition){
         this.op = op;
-        this.telemetry = telemetry;
         this.robotHardware = robotHardware;
         this.worldPosition = worldPosition;
     }
@@ -32,9 +31,14 @@ public class RobotMovement {
 
     public void goToPoint(double x, double y, double angle, double p, double turnSpeed){
 
+        angle = Math.toRadians(angle);
+
         distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
 
-        p /= 12;
+        if(distanceToPoint > 4.5)
+            p /= 12;
+        else
+            p /= 4;
 
         moveSpeed = Range.clip(distanceToPoint * p, 0, 1);
 
@@ -52,6 +56,66 @@ public class RobotMovement {
         drive = yPower * Math.cos(worldPosition.getAngle()) + xPower * Math.sin(worldPosition.getAngle());
         strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
     }
+
+    public void goToPoint(double x, double y, double angle){
+
+        double p = 1;
+        double turnSpeed = 1;
+
+        angle = Math.toRadians(angle);
+
+        distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
+
+        if(distanceToPoint > 4.5)
+            p /= 12;
+        else
+            p /= 4;
+
+        moveSpeed = Range.clip(distanceToPoint * p, 0, 1);
+
+        xToPoint = x - worldPosition.getxPosition();
+        yToPoint = y - worldPosition.getyPosition();
+
+        movementXPower = Math.abs(xToPoint) > 1 ? xToPoint / Math.abs(Math.abs(xToPoint) + Math.abs(yToPoint)) : 0;
+        movementYPower = Math.abs(yToPoint) > 1 ? yToPoint / Math.abs(Math.abs(yToPoint) + Math.abs(xToPoint)) : 0;
+
+        xPower = movementXPower * moveSpeed;
+        yPower = movementYPower * moveSpeed;
+
+        angleAtPreferred(angle, turnSpeed);
+
+        drive = yPower * Math.cos(worldPosition.getAngle()) + xPower * Math.sin(worldPosition.getAngle());
+        strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
+    }
+
+    public void goToPointMaxPower(double x, double y, double angle, double p, double turnSpeed, double maxPower){
+
+        angle = Math.toRadians(angle);
+
+        distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
+
+        if(distanceToPoint > 3)
+            p /= 12;
+        else
+            p /= 4;
+
+        moveSpeed = Range.clip(distanceToPoint * p, 0, maxPower);
+
+        xToPoint = x - worldPosition.getxPosition();
+        yToPoint = y - worldPosition.getyPosition();
+
+        movementXPower = Math.abs(xToPoint) > 1 ? xToPoint / Math.abs(Math.abs(xToPoint) + Math.abs(yToPoint)) : 0;
+        movementYPower = Math.abs(yToPoint) > 1 ? yToPoint / Math.abs(Math.abs(yToPoint) + Math.abs(xToPoint)) : 0;
+
+        xPower = movementXPower * moveSpeed;
+        yPower = movementYPower * moveSpeed;
+
+        angleAtPreferred(angle, turnSpeed);
+
+        drive = Range.clip(yPower * Math.cos(worldPosition.getAngle()) + xPower * Math.sin(worldPosition.getAngle()), -maxPower, maxPower);
+        strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
+    }
+
 
     //makes robot go to point
 //    public void goToPointOld(double x, double y, double moveSpeed, double preferredHeading, double turnSpeed){
@@ -85,16 +149,9 @@ public class RobotMovement {
     public void angleAtPoint(){}
 
     public void angleAtPreferred(double angle, double turnSpeed){
-
-        angleToPreferredMagnitude = Math.abs(angle - Math.toDegrees(worldPosition.getAngle()));
-
-        angleToPreferredDirection = (angle - Math.toDegrees(worldPosition.getAngle())) > 0 ? 1 : -1;
-
-        angleToPreferred = angleToPreferredMagnitude * angleToPreferredDirection;
+        angleToPreferred = Math.toDegrees(angle - worldPosition.getAngle());
 
         movementTurnPower = Range.clip((angleToPreferred/30), -1, 1);
-
-        movementTurnPower = Math.toDegrees(Math.abs(angleToPreferred)) < 1 ? 0 : movementTurnPower;
 
         turnPower = movementTurnPower * turnSpeed;
 
@@ -102,10 +159,10 @@ public class RobotMovement {
     }
 
     public void setMotorPowers(){
-        robotHardware.frontLeft.setPower(drive + strafe + rotate);
-        robotHardware.frontRight.setPower(drive + strafe - rotate);
-        robotHardware.backLeft.setPower(drive - strafe + rotate);
-        robotHardware.backRight.setPower(drive - strafe - rotate);
+        robotHardware.frontLeft.setPower(drive - strafe + rotate);
+        robotHardware.frontRight.setPower(drive - strafe - rotate);
+        robotHardware.backLeft.setPower(drive + strafe + rotate);
+        robotHardware.backRight.setPower(drive + strafe - rotate);
     }
 
     public void setDrive(double drive){
@@ -126,7 +183,7 @@ public class RobotMovement {
     public double getDistanceToPoint(){ return distanceToPoint; }
     public double getxToPoint(){ return xToPoint; }
     public double getyToPoint(){ return yToPoint; }
-    public double getAngleToPreferred(){ return angleToPreferred; }
+    public double getAngleToPreferred(){ return Math.abs(angleToPreferred); }
     public double getMoveSpeed(){ return moveSpeed; }
     public double getMovementXPower(){ return movementXPower; }
     public double getMovementYPower(){ return movementYPower; }
