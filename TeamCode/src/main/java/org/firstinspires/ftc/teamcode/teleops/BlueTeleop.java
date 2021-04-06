@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.enums.Alliance;
 import org.firstinspires.ftc.teamcode.stuffs.Constants;
 import org.firstinspires.ftc.teamcode.stuffs.RobotHardware;
 
+@Disabled
 @TeleOp(name = "Blue Teleop", group = "TeleOp")
 public class BlueTeleop extends LinearOpMode {
 

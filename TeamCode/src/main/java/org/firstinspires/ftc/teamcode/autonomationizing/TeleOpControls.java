@@ -15,22 +15,16 @@ import java.util.ArrayList;
 
 public class TeleOpControls {
 
-    //Shooter Adjust Variables
-    public boolean tickUpPressed = false, tickUpHeld = false, tickDownPressed = false, tickDownHeld = false;
-
     //Drive Controls Variables
     public double drive, strafe, rotate;
     public boolean slowMode = false, slowModePressed = false, slowModeHeld = false;
 
     //Power Shot Variables
     public boolean overrideDrive = false, resetPositionHeld = false, resetPositionPressed = false;
-    public ArrayList<PowerShotsHit> hits = new ArrayList<>();
-    public boolean turnPressed = false, turnHeld = false, negTurnPressed = false, negTurnHeld = false;
-    public double xYeet = -46, yYeet = 59, angleYeet = 7.5;
     ElapsedTime resetTimer = new ElapsedTime();
 
     //Shooter Controls Variables
-    public boolean shooting = false, angleUp = true, hopperUp = false, shootPressed = false, angleUpPressed = false, angleDownPressed = false, hopperPressed = false,
+    public boolean shooting = true, angleUp = true, hopperUp = false, shootPressed = false, angleUpPressed = false, angleDownPressed = false, hopperPressed = false,
             pushPressed = false, shootHeld = false, angleUpHeld = false, angleDownHeld = false, hopperHeld = false, pushHeld = false;
     public ElapsedTime pusherTimer = new ElapsedTime();
     public PushStep pushStep = PushStep.NOT_MOVING;
@@ -208,8 +202,23 @@ public class TeleOpControls {
     }
 
     public void shooterControls(){
-        //fly wheel (automatically turns on when hopper goes up and turns off when hopper goes down)
-        shooting = true;
+
+        if(!shootHeld){
+            if(op.gamepad2.a){
+                shootHeld = true;
+                shootPressed = true;
+            }
+            else
+                shootPressed = false;
+        }
+        else{
+            shootPressed = false;
+            if(!op.gamepad2.a)
+                shootHeld = false;
+        }
+
+        if(shootPressed)
+            shooting = !shooting;
 
         if(overrideDrive)
             angleUp = false;
@@ -280,11 +289,7 @@ public class TeleOpControls {
         }
 
         if(hopperPressed){
-            if (hopperUp)
-                intakeStatus = IntakeStatus.INTAKING;
-            else{
-                intakeStatus = IntakeStatus.STOP;
-            }
+            intakeStatus = hopperUp ? IntakeStatus.INTAKING : IntakeStatus.STOP;
             hopperUp = !hopperUp;
         }
 
@@ -314,9 +319,6 @@ public class TeleOpControls {
                     pushHeld = false;
             }
 
-//            if(robotHardware.shooter1.getVelocity() < constants.shootHighVelocity - 10)
-//                pushPressed = false;
-
             if (pushPressed && pushStep == PushStep.NOT_MOVING) {
                 pushStep = PushStep.STEP_ONE;
                 pusherTimer.reset();
@@ -342,7 +344,7 @@ public class TeleOpControls {
                 if (op.gamepad1.x) {
                     if (robotHardware.shooter1.getVelocity() >= constants.shootLowVelocity && pushStep == PushStep.NOT_MOVING) {
                         pushPressed = true;
-                        pushHeld = false;
+                        pushHeld = true;
                     }
                 } else
                     pushPressed = false;
@@ -350,10 +352,6 @@ public class TeleOpControls {
                 pushPressed = false;
                 if (!op.gamepad1.x)
                     pushHeld = false;
-            }
-
-            if(robotHardware.shooter1.getVelocity() < constants.shootLowVelocity){
-                pushPressed = false;
             }
 
             if (pushPressed && pushStep == PushStep.NOT_MOVING) {
@@ -433,12 +431,8 @@ public class TeleOpControls {
         if(wobblePressed){
             if(wobblePosition != WobblePosition.FORWARD)
                 wobblePosition = WobblePosition.FORWARD;
-            else{
-                if(wobbleSecured)
-                    wobblePosition = WobblePosition.HOLDING;
-                else
-                    wobblePosition = WobblePosition.BACK;
-            }
+            else
+                wobblePosition = wobbleSecured ? WobblePosition.HOLDING : WobblePosition.BACK;
         }
 
         if(wobblePosition == WobblePosition.FORWARD){
@@ -472,9 +466,6 @@ public class TeleOpControls {
         if(wobbleSecurePressed)
             wobbleSecured = !wobbleSecured;
 
-        if(wobbleSecured)
-            robotHardware.wobbleSecure.setPosition(constants.wobbleSecureClosed);
-        else
-            robotHardware.wobbleSecure.setPosition(constants.wobbleSecureOpen);
+        robotHardware.wobbleSecure.setPosition(wobbleSecured ? constants.wobbleSecureClosed : constants.wobbleSecureOpen);
     }
 }

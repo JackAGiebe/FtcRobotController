@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.enums.Alliance;
 import org.firstinspires.ftc.teamcode.stuffs.Constants;
 import org.firstinspires.ftc.teamcode.stuffs.RobotHardware;
 
-@TeleOp(name = "Ivy's Blue Teleop", group = "TeleOp")
+@TeleOp(name = "Blue Teleop", group = "TeleOp")
 public class IvyBlueTeleop extends LinearOpMode {
 
     RobotHardware robotHardware = new RobotHardware(this);

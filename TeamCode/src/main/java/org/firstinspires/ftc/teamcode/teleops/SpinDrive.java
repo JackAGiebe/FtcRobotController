@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleops;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.autonomationizing.WorldPosition;
 import org.firstinspires.ftc.teamcode.stuffs.Constants;
 import org.firstinspires.ftc.teamcode.stuffs.RobotHardware;
 
+@Disabled
 @TeleOp(name = "Drive while spinning", group = "test")
 public class SpinDrive extends LinearOpMode {
 
