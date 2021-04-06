@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autons;
 
 import com.google.gson.internal.$Gson$Preconditions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -99,7 +100,7 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
                     break;
 
                 case FIRST_SHOTS:
-                    robotMovement.goToPoint(5, 55, 20, 1.2, 1.3);
+                    robotMovement.goToPoint(5, 60, 20, .7, .8);
                     if(!(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 1.5))
                         aimTime.reset();
                     else if(aimed)
@@ -141,7 +142,7 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
                     break;
 
                 case SHOOT_HIGH:
-                    robotMovement.goToPoint(5, 55, 20, 1.1, 1.2);
+                    robotMovement.goToPoint(5, 60, 20, .7, .8);
                     if(!(robotMovement.getDistanceToPoint() < 3 && robotMovement.getAngleToPreferred() < 2))
                         aimTime.reset();
                     else if(aimed){
@@ -170,17 +171,17 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
 
                 case INTAKE_STACK_AGAIN:
                     if(stackJitter == StackJitter.FORWARD_ONE){
-                        robotMovement.goToPointMaxPower(27, 37, 90, 1, 1, .5);
+                        robotMovement.goToPointMaxPower(27, 40, 90, 1, 1, .5);
                         if(robotMovement.getDistanceToPoint() < 2)
                             stackJitter = StackJitter.BACK_ONE;
                     }
                     else if(stackJitter == StackJitter.BACK_ONE){
-                        robotMovement.goToPointMaxPower(20, 37, 90, 1, 1, .5);
+                        robotMovement.goToPointMaxPower(20, 40, 90, 1, 1, .5);
                         if(robotMovement.getDistanceToPoint() < 2)
                             stackJitter = StackJitter.FORWARD_TWO;
                     }
                     else if(stackJitter == StackJitter.FORWARD_TWO){
-                        robotMovement.goToPointMaxPower(33, 45, 90, 1, 1, .5);
+                        robotMovement.goToPointMaxPower(33, 40, 90, 1, 1, .5);
                         if(robotMovement.getDistanceToPoint() < 2)
                             stackJitter = StackJitter.BACK_TWO;
                     }
@@ -190,7 +191,7 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
                             stackJitter = StackJitter.FORWARD_THREE;
                     }
                     else if(stackJitter == StackJitter.FORWARD_THREE){
-                        robotMovement.goToPointMaxPower(40, 45, 90, 1, 1, .5);
+                        robotMovement.goToPointMaxPower(40, 40, 90, 1, 1, .5);
                         if(robotMovement.getDistanceToPoint() < 3) {
                             driveState = HighGoalOneWobbleStack.BACK_FROM_STACK_AGAIN;
                         }
@@ -205,7 +206,7 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
                     break;
 
                 case SHOOT_HIGH_AGAIN:
-                    robotMovement.goToPoint(5, 55, 18, 1.2, 1.3);
+                    robotMovement.goToPoint(5, 60, 20, .7, .8);
                     if(!(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 2))
                         aimTime.reset();
                     else if(aimed){
@@ -248,10 +249,10 @@ public class BlueHighGoalOneWobbleStack extends LinearOpMode {
 
                 case PARK:
                     if(randomization != randomization.A)
-                        robotMovement.goToPoint(5, 70, 0, 1, 1);
+                        robotMovement.goToPoint(5, 76, 0, 1, 1);
                     else {
                         if(totalTime.seconds() > 20)
-                            robotMovement.goToPoint(18, 70, 0, 1, 1);
+                            robotMovement.goToPoint(18, 76, 0, 1, 1);
                         else
                             robotMovement.goToPoint(18, 45, 0, 1, 1);
                     }

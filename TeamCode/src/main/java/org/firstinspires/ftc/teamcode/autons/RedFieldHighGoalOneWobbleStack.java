@@ -19,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Red Field High Goal One Wobble Stack", group = "BNB")
+@Autonomous(name = "Red Field High Goal One Wobble", group = "BNB")
 public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
     RobotHardware robotHardware = new RobotHardware(this);
     WorldPosition worldPosition = new WorldPosition(0, 0, 0, robotHardware, this);
@@ -102,7 +102,7 @@ public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
 
 
                 case FIRST_SHOTS:
-                    robotMovement.goToPoint(-43, 59, 18.5, 1, 1.5);
+                    robotMovement.goToPoint(-43, 59, 19, 1, 1.5);
                     if(!(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 1.5))
                         aimTime.reset();
                     else if(aimed)
@@ -110,12 +110,8 @@ public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
                     else
                         if(aimTime.milliseconds() > 200)
                             aimed = true;
-                    if(shotsFired == 3) {
-                        if(randomization != Randomization.A)
-                            driveState = HighGoalOneWobbleStack.BACK_TO_STACK;
-                        else
+                    if(shotsFired == 3)
                             driveState = HighGoalOneWobbleStack.PLACE_WOBBLE;
-                    }
                     break;
 
                 case BACK_TO_STACK:
@@ -264,7 +260,7 @@ public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
 
                 case PARK:
                     autonFunctions.turnOffIntake();
-                    robotMovement.goToPoint(-45, 77, 0, 1, 1);
+                    robotMovement.goToPoint(-55, 77, 0, 1, 1);
                     break;
             }
         }

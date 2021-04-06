@@ -35,10 +35,7 @@ public class RobotMovement {
 
         distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
 
-        if(distanceToPoint > 4.5)
-            p /= 12;
-        else
-            p /= 4;
+        p /= distanceToPoint > 4.5 ? 12 : 4;
 
         moveSpeed = Range.clip(distanceToPoint * p, 0, 1);
 
@@ -57,36 +54,7 @@ public class RobotMovement {
         strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
     }
 
-    public void goToPoint(double x, double y, double angle){
-
-        double p = 1;
-        double turnSpeed = 1;
-
-        angle = Math.toRadians(angle);
-
-        distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
-
-        if(distanceToPoint > 4.5)
-            p /= 12;
-        else
-            p /= 4;
-
-        moveSpeed = Range.clip(distanceToPoint * p, 0, 1);
-
-        xToPoint = x - worldPosition.getxPosition();
-        yToPoint = y - worldPosition.getyPosition();
-
-        movementXPower = Math.abs(xToPoint) > 1 ? xToPoint / Math.abs(Math.abs(xToPoint) + Math.abs(yToPoint)) : 0;
-        movementYPower = Math.abs(yToPoint) > 1 ? yToPoint / Math.abs(Math.abs(yToPoint) + Math.abs(xToPoint)) : 0;
-
-        xPower = movementXPower * moveSpeed;
-        yPower = movementYPower * moveSpeed;
-
-        angleAtPreferred(angle, turnSpeed);
-
-        drive = yPower * Math.cos(worldPosition.getAngle()) + xPower * Math.sin(worldPosition.getAngle());
-        strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
-    }
+    public void goToPoint(double x, double y, double angle){ goToPoint(x, y, angle, 1, 1); }
 
     public void goToPointMaxPower(double x, double y, double angle, double p, double turnSpeed, double maxPower){
 
@@ -116,37 +84,7 @@ public class RobotMovement {
         strafe = -yPower * Math.sin(worldPosition.getAngle()) + xPower * Math.cos(worldPosition.getAngle());
     }
 
-
-    //makes robot go to point
-//    public void goToPointOld(double x, double y, double moveSpeed, double preferredHeading, double turnSpeed){
-//
-//        double distanceToPoint = Math.hypot(x - worldPosition.getxPosition(), y - worldPosition.getyPosition());
-//
-//        double absoluteAngleToPoint = Math.atan2(y-worldPosition.getyPosition(), x-worldPosition.getxPosition());
-//        double relativeAngleToPoint = mathFunctions.angleWrap(absoluteAngleToPoint - Math.toRadians(worldPosition.getAngle()));
-//
-//        double relativeXToPoint = Math.cos(relativeAngleToPoint) * distanceToPoint;
-//        double relativeYToPoint = Math.sin(relativeAngleToPoint) * distanceToPoint;
-//        double relativeTurnAngle = relativeAngleToPoint + preferredHeading;
-//
-//        double movementXPower = relativeXToPoint / Math.abs(relativeXToPoint) * Math.abs(relativeYToPoint);
-//        double movementYPower = relativeYToPoint / Math.abs(relativeXToPoint) * Math.abs(relativeYToPoint);
-//        double movementTurnPower = Range.clip((relativeTurnAngle/30), -1, 1);
-//
-//        if(distanceToPoint < 10){
-//            movementTurnPower = 0;
-//        }
-//
-//        xPower = movementXPower * moveSpeed;
-//        yPower = movementYPower * moveSpeed;
-//        turnPower = movementTurnPower * turnSpeed;
-//    }
-
-    public void goThroughPoint(){
-
-    }
-
-    public void angleAtPoint(){}
+    public void goThroughPoint(double x, double y, double angle, double turnSpeed){ goToPoint(x, y, angle, Integer.MAX_VALUE, turnSpeed); }
 
     public void angleAtPreferred(double angle, double turnSpeed){
         angleToPreferred = Math.toDegrees(angle - worldPosition.getAngle());

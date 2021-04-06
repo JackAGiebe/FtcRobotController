@@ -30,7 +30,8 @@ public class ShowOff extends LinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             worldPosition.giveEncoderHardwareCalls(robotHardware.leftEncoder.getCurrentPosition(), robotHardware.rightEncoder.getCurrentPosition(), robotHardware.normalEncoder.getCurrentPosition());
             worldPosition.updateWorldPosition();
-            robotMovement.goToPoint(0, 0, 0, 2, 1);
+            robotMovement.goToPoint(0, 0,
+                    0, 2, 1.5);
             robotMovement.setMotorPowers();
 
 //            telemetry.addData("Drive", robotMovement.getDrive());

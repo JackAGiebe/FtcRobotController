@@ -33,7 +33,7 @@ public class WorldPosition {
 
     //Get calls from the opmode. The negative on the left call makes it so that forwards is positive for both right and left.
     public void giveEncoderHardwareCalls(double leftCall, double rightCall, double normalCall){
-        this.leftCall = -leftCall;
+        this.leftCall = leftCall;
         this.rightCall = rightCall;
         this.normalCall = normalCall;
     }

@@ -77,7 +77,54 @@ public class TeleOpControls {
         }
 
 
-        if(shooting || wobblePosition == WobblePosition.FORWARD){
+        if(wobblePosition == WobblePosition.FORWARD){
+            slowMode = true;
+        }
+        if(hopperPressed || wobblePressed){
+            slowMode = false;
+        }
+
+        if(slowModePressed)
+            slowMode = !slowMode;
+
+        if(!overrideDrive) {
+            if (!slowMode) {
+                robotHardware.frontLeft.setPower(drive + strafe + rotate);
+                robotHardware.frontRight.setPower(drive + strafe - rotate);
+                robotHardware.backLeft.setPower(drive - strafe + rotate);
+                robotHardware.backRight.setPower(drive - strafe - rotate);
+            } else {
+                robotHardware.frontLeft.setPower((drive + strafe + rotate) / 2);
+                robotHardware.frontRight.setPower((drive + strafe - rotate) / 2);
+                robotHardware.backLeft.setPower((drive - strafe + rotate) / 2);
+                robotHardware.backRight.setPower((drive - strafe - rotate) / 2);
+            }
+        }
+        else
+            robotMovement.setMotorPowers();
+    }
+
+    public void ivyDriveControls(){
+        drive = -op.gamepad1.left_stick_y;
+        strafe = -op.gamepad1.left_stick_x;
+        rotate = op.gamepad1.right_stick_x;
+
+        if(!slowModeHeld){
+            if(op.gamepad1.left_stick_button){
+                slowModePressed = true;
+                slowModeHeld = true;
+            }
+            else
+                slowModePressed = false;
+        }
+        else{
+            slowModePressed = false;
+            if(!op.gamepad1.left_stick_button)
+                slowModeHeld = false;
+        }
+
+
+        if(wobblePosition == WobblePosition.FORWARD){
             slowMode = true;
         }
         if(hopperPressed || wobblePressed){
@@ -129,15 +176,15 @@ public class TeleOpControls {
         if(alliance == Alliance.RED){
             if(op.gamepad1.dpad_up){
                 overrideDrive = true;
-                robotMovement.goToPoint(-48, 59, 0, 1.75, 1.5);
+                robotMovement.goToPoint(-47, 59, 0, 1.25, 1.25);
             }
             else if(op.gamepad1.dpad_right){
                 overrideDrive = true;
-                robotMovement.goToPoint(-44, 59, 0, 1.75, 1.5);
+                robotMovement.goToPoint(-44, 59, 3, 1.25, 1.25);
             }
             else if(op.gamepad1.dpad_left){
                 overrideDrive = true;
-                robotMovement.goToPoint(-51, 59, -2, 1.75, 1.5);
+                robotMovement.goToPoint(-50, 59, -2, 1.25, 1.25);
             }
             else
                 overrideDrive = false;
@@ -145,7 +192,7 @@ public class TeleOpControls {
         else{
             if(op.gamepad1.dpad_up){
                 overrideDrive = true;
-                robotMovement.goToPoint(52, 59, 6, 1.75, 1.5);
+                robotMovement.goToPoint(53.5, 59, 6, 1.75, 1.5);
             }
             else if(op.gamepad1.dpad_right){
                 overrideDrive = true;
@@ -160,119 +207,9 @@ public class TeleOpControls {
         }
     }
 
-    public void turnMoveForPowerShots(){
-        if(!turnHeld){
-            if(op.gamepad1.right_stick_x < -.5){
-                turnHeld = true;
-                turnPressed = true;
-            }
-            else
-                turnPressed = true;
-        }
-        else{
-            turnPressed = false;
-            if(!(op.gamepad1.right_stick_x < -.5))
-                turnHeld = false;
-        }
-
-        if(!negTurnHeld){
-            if(op.gamepad1.right_stick_x > .5){
-                negTurnHeld = true;
-                negTurnPressed = true;
-            }
-            else
-                negTurnPressed = true;
-        }
-        else{
-            negTurnPressed = false;
-            if(!(op.gamepad1.right_stick_x > .5))
-                negTurnHeld = false;
-        }
-
-        if(turnPressed) {
-            xYeet = worldPosition.getxPosition() + 2;
-            yYeet = worldPosition.getyPosition();
-            angleYeet = worldPosition.getAngleDegrees() + 4;
-        }
-        else if(turnPressed){
-            xYeet = worldPosition.getxPosition() - 2;
-            yYeet = worldPosition.getyPosition();
-            angleYeet = worldPosition.getAngleDegrees() - 4;
-        }
-        if(turnHeld || negTurnHeld){
-            overrideDrive = true;
-            robotMovement.goToPoint(xYeet, yYeet, angleYeet, 1, 1);
-        }
-    }
-
-    public boolean fullAutoPowerShots(Alliance alliance){
-        if(Math.abs(op.gamepad1.right_stick_x) + Math.abs(op.gamepad1.right_stick_y) > .5 && (!hits.contains(PowerShotsHit.LEFT) || !hits.contains(PowerShotsHit.MIDDLE) || !hits.contains(PowerShotsHit.RIGHT))){
-            robotHardware.shooter1.setVelocity(constants.shootLowVelocity);
-            robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
-            robotHardware.hopper1.setPosition(constants.hopper1Up);
-            robotHardware.hopper2.setPosition(constants.hopper2Up);
-
-            if(alliance == Alliance.RED) {
-                if (!hits.contains(PowerShotsHit.LEFT)) {
-                    robotMovement.goToPoint(-48, 59, -3, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.LEFT);
-                } else if (!hits.contains(PowerShotsHit.MIDDLE)) {
-                    robotMovement.goToPoint(-46, 59, 3, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.MIDDLE);
-                } else if (!hits.contains(PowerShotsHit.RIGHT)) {
-                    robotMovement.goToPoint(-46, 59, 11, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.RIGHT);
-                }
-            }
-            else{
-                if (!hits.contains(PowerShotsHit.RIGHT)) {
-                    robotMovement.goToPoint(45, 59, 11, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.RIGHT);
-                } else if (!hits.contains(PowerShotsHit.MIDDLE)) {
-                    robotMovement.goToPoint(45, 59, 7, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.MIDDLE);
-                } else if (!hits.contains(PowerShotsHit.LEFT)) {
-                    robotMovement.goToPoint(45, 59, 3, 1, 1);
-                    if (pushStep == PushStep.STEP_TWO)
-                        hits.add(PowerShotsHit.LEFT);
-                }
-            }
-
-            if(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 1){
-                if (pushStep == PushStep.NOT_MOVING) {
-                    pushStep = PushStep.STEP_ONE;
-                    pusherTimer.reset();
-                }
-                if (pushStep == PushStep.STEP_ONE) {
-                    robotHardware.pusher.setPosition(constants.pusherIn);
-                    if (pusherTimer.milliseconds() > 150) {
-                        pusherTimer.reset();
-                        pushStep = PushStep.STEP_TWO;
-                    }
-                } else if (pushStep == PushStep.STEP_TWO) {
-                    robotHardware.pusher.setPosition(constants.pusherOut);
-                    if (pusherTimer.milliseconds() > 250)
-                        pushStep = PushStep.NOT_MOVING;
-                } else
-                    robotHardware.pusher.setPosition(constants.pusherOut);
-            }
-            return true;
-        }
-        else
-            return false;
-    }
-
     public void shooterControls(){
         //fly wheel (automatically turns on when hopper goes up and turns off when hopper goes down)
-        if(hopperUp)
-            shooting = true;
-        else
-            shooting = false;
+        shooting = true;
 
         if(overrideDrive)
             angleUp = false;
@@ -377,8 +314,8 @@ public class TeleOpControls {
                     pushHeld = false;
             }
 
-            if(robotHardware.shooter1.getVelocity() < constants.shootHighVelocity)
-                pushPressed = false;
+//            if(robotHardware.shooter1.getVelocity() < constants.shootHighVelocity - 10)
+//                pushPressed = false;
 
             if (pushPressed && pushStep == PushStep.NOT_MOVING) {
                 pushStep = PushStep.STEP_ONE;
@@ -387,14 +324,14 @@ public class TeleOpControls {
 
             if (pushStep == PushStep.STEP_ONE) {
                 robotHardware.pusher.setPosition(constants.pusherIn);
-                if (pusherTimer.milliseconds() > 150) {
+                if (pusherTimer.milliseconds() > 80) {
                     pushStep = PushStep.STEP_TWO;
                     pusherTimer.reset();
                 }
             }
             else if (pushStep == PushStep.STEP_TWO) {
                 robotHardware.pusher.setPosition(constants.pusherOut);
-                if (pusherTimer.milliseconds() > 250)
+                if (pusherTimer.milliseconds() > 120)
                     pushStep = PushStep.NOT_MOVING;
             }
             else
@@ -426,13 +363,14 @@ public class TeleOpControls {
 
             if (pushStep == PushStep.STEP_ONE) {
                 robotHardware.pusher.setPosition(constants.pusherIn);
-                if (pusherTimer.milliseconds() > 150) {
+                if (pusherTimer.milliseconds() > 80) {
                     pusherTimer.reset();
                     pushStep = PushStep.STEP_TWO;
                 }
             } else if (pushStep == PushStep.STEP_TWO) {
                 robotHardware.pusher.setPosition(constants.pusherOut);
-                if (pusherTimer.milliseconds() > 250)
+                if (pusherTimer.milliseconds() > 80)
+                    pusherTimer.reset();
                     pushStep = PushStep.NOT_MOVING;
             } else
                 robotHardware.pusher.setPosition(constants.pusherOut);
@@ -538,6 +476,5 @@ public class TeleOpControls {
             robotHardware.wobbleSecure.setPosition(constants.wobbleSecureClosed);
         else
             robotHardware.wobbleSecure.setPosition(constants.wobbleSecureOpen);
-
     }
 }
