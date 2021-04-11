@@ -20,6 +20,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+@Disabled
 @Autonomous(name = "Blue Field High Goal One Wobble", group = "BNB")
 public class BlueFieldHighGoalOneWobbleStack extends LinearOpMode {
     RobotHardware robotHardware = new RobotHardware(this);
@@ -212,6 +213,7 @@ public class BlueFieldHighGoalOneWobbleStack extends LinearOpMode {
                     break;
 
                 case PLACE_WOBBLE:
+                    autonFunctions.actuallyTurnOffShooter();
                     if(randomization == Randomization.A)
                         robotMovement.goToPoint(14, 76, -72, 1, 1);
                     else if(randomization == Randomization.B)

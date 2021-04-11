@@ -18,6 +18,7 @@ public class AutonFunctions {
     MathFunctions mathFunctions = new MathFunctions();
     ElapsedTime pushWait = new ElapsedTime();
     ElapsedTime aimTime = new ElapsedTime();
+    ElapsedTime overshootTimer = new ElapsedTime();
 
     public AutonFunctions(RobotHardware robotHardware, RobotMovement robotMovement) {
         this.robotHardware = robotHardware;
@@ -48,21 +49,21 @@ public class AutonFunctions {
     }
 
     public int shootOnceHigh() {
-        robotHardware.shooter1.setVelocity(constants.shootHighVelocity);
+        robotHardware.shooter1.setVelocity(constants.shootHighVelocity - 20);
         robotHardware.shooter2.setVelocity(constants.shootHighVelocity);
         robotHardware.hopper1.setPosition(constants.hopper1Up);
         robotHardware.hopper2.setPosition(constants.hopper2Up);
 
         if (pushStep == PushStep.NOT_MOVING) {
             robotHardware.pusher.setPosition(constants.pusherOut);
-            if (robotHardware.shooter1.getVelocity() >= constants.shootHighVelocity - 10) {
+            if (robotHardware.shooter1.getVelocity() >= constants.shootHighVelocity - 30) {
                 pushStep = PushStep.STEP_ONE;
                 pusherTimer.reset();
             }
             return 0;
         } else if (pushStep == PushStep.STEP_ONE) {
             robotHardware.pusher.setPosition(constants.pusherIn);
-            if (pusherTimer.milliseconds() > 80) {
+            if (pusherTimer.milliseconds() > 100) {
                 pusherTimer.reset();
                 pushStep = PushStep.STEP_TWO;
                 return 1;
@@ -72,7 +73,7 @@ public class AutonFunctions {
         }
         else if (pushStep == PushStep.STEP_TWO){
             robotHardware.pusher.setPosition(constants.pusherOut);
-            if(pusherTimer.milliseconds() > 120){
+            if(pusherTimer.milliseconds() > 200){
                 pushStep = PushStep.NOT_MOVING;
             }
             return 0;
@@ -131,12 +132,22 @@ public class AutonFunctions {
         robotHardware.hopper2.setPosition(constants.hopper2Down);
     }
 
+    public void reverseIntake(){
+        robotHardware.intake1.setPower(-constants.intakePower/3);
+        robotHardware.intake2.setPower(-constants.intakePower/3);
+    }
+
     public void turnOffIntake(){
         robotHardware.intake1.setPower(0);
         robotHardware.intake2.setPower(0);
     }
 
     public void turnOffShooter(){
+//        robotHardware.shooter1.setPower(0);
+//        robotHardware.shooter2.setPower(0);
+    }
+
+    public void actuallyTurnOffShooter(){
         robotHardware.shooter1.setPower(0);
         robotHardware.shooter2.setPower(0);
     }
@@ -154,6 +165,11 @@ public class AutonFunctions {
         robotHardware.wobble2.setPosition(constants.wobble2Back);
         robotHardware.wobbleSecure.setPosition(constants.wobbleSecureOpen);
     }
+    public void liftWobbleArmClosed(){
+        robotHardware.wobble1.setPosition(constants.wobble1Back);
+        robotHardware.wobble2.setPosition(constants.wobble2Back);
+        robotHardware.wobbleSecure.setPosition(constants.wobbleSecureClosed);
+    }
 
     public ElapsedTime wobbleTime = new ElapsedTime();
     //needs wobbleTime reset before being called
@@ -161,9 +177,21 @@ public class AutonFunctions {
         if(robotHardware.wobbleSecure.getPosition() != constants.wobbleSecureClosed)
             wobbleTime.reset();
         robotHardware.wobbleSecure.setPosition(constants.wobbleSecureClosed);
-        if(wobbleTime.milliseconds() > 400){
+        if(wobbleTime.milliseconds() > 300){
             robotHardware.wobble1.setPosition(constants.wobble1Holding);
             robotHardware.wobble2.setPosition(constants.wobble2Holding);
         }
+    }
+
+    public void prepGrabWobble(){
+        robotHardware.wobbleSecure.setPosition(constants.wobbleSecureOpen);
+        robotHardware.wobble1.setPosition(constants.wobble1Front);
+        robotHardware.wobble2.setPosition(constants.wobble2Front);
+    }
+
+    public void holdWobbleInFrontOfRobot(){
+        robotHardware.wobble1.setPosition(constants.wobble1Front);
+        robotHardware.wobble2.setPosition(constants.wobble2Front);
+        robotHardware.wobbleSecure.setPosition(constants.wobbleSecureClosed);
     }
 }

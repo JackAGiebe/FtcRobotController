@@ -17,10 +17,10 @@ public class Constants {
     public double wobbleSecureOpen = .5, wobbleSecureClosed = 0;
     public double wobble1Holding = .7, wobble1Front = .05, wobble1Back = .85, wobble2Holding = 0.3, wobble2Front = .95, wobble2Back = .15;
     public double wobble1LeanForward = 0.5, wobble2LeanForward = 0.5;
-    public double hopper1Down = .3, hopper2Down = .7, hopper1Up = 0.545, hopper2Up = 0.455;
-    public double pusherIn = .1, pusherOut = .32;
+    public double hopper1Down = .25, hopper2Down = .75, hopper1Up = 0.545, hopper2Up = 0.455;
+    public double pusherIn = .08, pusherOut = .32;
     public double shotPower = .8, shotVelocity = 1500;
-    public double shootHighVelocity = 1670, shootLowVelocity = 1550;
+    public double shootHighVelocity = 1700, shootLowVelocity = 1420;
     public double shootHighPower = 1, shootLowPower = .875;
     public double intakePower = 1;
 

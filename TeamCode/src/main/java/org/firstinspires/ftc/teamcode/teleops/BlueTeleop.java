@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.enums.Alliance;
 import org.firstinspires.ftc.teamcode.stuffs.Constants;
 import org.firstinspires.ftc.teamcode.stuffs.RobotHardware;
 
-@Disabled
 @TeleOp(name = "Blue Teleop", group = "TeleOp")
 public class BlueTeleop extends LinearOpMode {
 

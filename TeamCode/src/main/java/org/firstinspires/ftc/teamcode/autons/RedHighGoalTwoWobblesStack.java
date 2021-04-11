@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.autonomationizing.AutonFunctions;
 import org.firstinspires.ftc.teamcode.autonomationizing.RobotMovement;
 import org.firstinspires.ftc.teamcode.autonomationizing.WorldPosition;
 import org.firstinspires.ftc.teamcode.enums.Randomization;
-import org.firstinspires.ftc.teamcode.enums.drivestates.HighGoalOneWobbleStack;
+import org.firstinspires.ftc.teamcode.enums.drivestates.HighGoalTwoWobblesStack;
 import org.firstinspires.ftc.teamcode.enums.drivestates.StackJitter;
 import org.firstinspires.ftc.teamcode.stuffs.Constants;
 import org.firstinspires.ftc.teamcode.stuffs.RobotHardware;
@@ -20,8 +20,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Red Wall High Goal One Wobble Stack", group = "BNB")
-public class RedHighGoalOneWobbleStack extends LinearOpMode {
+@Autonomous(name = "Red Wall High Goal Two Wobbles Stack", group = "ACARRY")
+public class RedHighGoalTwoWobblesStack extends LinearOpMode {
     RobotHardware robotHardware = new RobotHardware(this);
     WorldPosition worldPosition = new WorldPosition(0, 0, 0, robotHardware, this);
     RobotMovement robotMovement = new RobotMovement(this, robotHardware, worldPosition);
@@ -31,7 +31,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
     OpenCvCamera webcam;
     EasyOpenCVExample.SkystoneDeterminationPipeline pipeline;
 
-    HighGoalOneWobbleStack driveState = HighGoalOneWobbleStack.WAIT_FOR_START;
+    HighGoalTwoWobblesStack driveState = HighGoalTwoWobblesStack.WAIT_FOR_START;
     Randomization randomization = Randomization.A;
     StackJitter stackJitter = StackJitter.FORWARD_ONE;
 
@@ -94,13 +94,13 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     robotMovement.setStrafe(0);
                     robotMovement.setRotate(0);
                     autonFunctions.prepShootHighGoal();
-                    driveState = HighGoalOneWobbleStack.DRIVE_TO_SHOTS;
+                    driveState = HighGoalTwoWobblesStack.DRIVE_TO_SHOTS;
                     break;
 
                 case DRIVE_TO_SHOTS:
                     robotMovement.goToPoint(-5, 60, 0);
                     if(worldPosition.getyPosition() > 35)
-                        driveState = HighGoalOneWobbleStack.FIRST_SHOTS;
+                        driveState = HighGoalTwoWobblesStack.FIRST_SHOTS;
                     break;
 
                 case FIRST_SHOTS:
@@ -116,9 +116,9 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                         postShotTime.reset();
                     else if(postShotTime.milliseconds() > 250) {
                         if(randomization != Randomization.A)
-                            driveState = HighGoalOneWobbleStack.BACK_TO_STACK;
+                            driveState = HighGoalTwoWobblesStack.BACK_TO_STACK;
                         else
-                            driveState = HighGoalOneWobbleStack.PLACE_WOBBLE;
+                            driveState = HighGoalTwoWobblesStack.PLACE_WOBBLE;
                     }
                     break;
 
@@ -128,7 +128,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     robotMovement.goToPoint(-10, 40, -90, 1, 1.1);
                     if(robotMovement.getDistanceToPoint() < 3) {
                         autonFunctions.turnOffShooter();
-                        driveState = HighGoalOneWobbleStack.INTAKE_STACK;
+                        driveState = HighGoalTwoWobblesStack.INTAKE_STACK;
                     }
                     break;
 
@@ -137,7 +137,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     robotHardware.pusher.setPosition(constants.pusherOut);
                     robotMovement.goToPointMaxPower(-22, 38, -90, .85, 1, .35);
                     if(robotMovement.getDistanceToPoint() < 3) {
-                        driveState = HighGoalOneWobbleStack.BACK_FROM_STACK;
+                        driveState = HighGoalTwoWobblesStack.BACK_FROM_STACK;
                         autonFunctions.prepShootHighGoalNoHopper();
                     }
                     break;
@@ -145,13 +145,13 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                 case BACK_FROM_STACK:
                     robotMovement.goToPointMaxPower(-13, 40, -90, 1, 1, .75);
                     if(robotMovement.getDistanceToPoint() < 3) {
-                        driveState = HighGoalOneWobbleStack.SHOOT_HIGH;
+                        driveState = HighGoalTwoWobblesStack.SHOOT_HIGH;
                         autonFunctions.prepShootHighGoalNoHopper();
                     }
                     break;
 
                 case SHOOT_HIGH:
-                    robotMovement.goToPoint(-11, 59, -11.5, 1, 1);
+                    robotMovement.goToPoint(-11, 57, -11.5, 1, 1);
                     if(!(robotMovement.getDistanceToPoint() < 2.5 && robotMovement.getAngleToPreferred() < 1.75))
                         aimTime.reset();
                     else if(aimed){
@@ -167,9 +167,9 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                         postShotTime.reset();
                     else if(postShotTime.milliseconds() > 250) {
                         if(randomization == Randomization.C)
-                            driveState = HighGoalOneWobbleStack.BACK_TO_STACK_AGAIN;
+                            driveState = HighGoalTwoWobblesStack.BACK_TO_STACK_AGAIN;
                         else
-                            driveState = HighGoalOneWobbleStack.PLACE_WOBBLE;
+                            driveState = HighGoalTwoWobblesStack.PLACE_WOBBLE;
                     }
                     break;
 
@@ -181,7 +181,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     robotMovement.goToPoint(-7.5, 40, -90, 1, 1);
                     if(robotMovement.getDistanceToPoint() < 3) {
                         autonFunctions.turnOffShooter();
-                        driveState = HighGoalOneWobbleStack.INTAKE_STACK_AGAIN;
+                        driveState = HighGoalTwoWobblesStack.INTAKE_STACK_AGAIN;
                     }
                     break;
 
@@ -212,7 +212,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                             robotMovement.goToPointMaxPower(-50, 35, -90, 1, 1, 5);
                             if (robotMovement.getDistanceToPoint() < 5) {
                                 autonFunctions.prepShootHighGoalNoHopper();
-                                driveState = HighGoalOneWobbleStack.BACK_FROM_STACK_AGAIN;
+                                driveState = HighGoalTwoWobblesStack.BACK_FROM_STACK_AGAIN;
                             }
                     }
                     break;
@@ -220,13 +220,13 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                 case BACK_FROM_STACK_AGAIN:
                     robotMovement.goToPoint(-17, 40, -90);
                     if(robotMovement.getDistanceToPoint() < 3) {
-                        driveState = HighGoalOneWobbleStack.SHOOT_HIGH_AGAIN;
+                        driveState = HighGoalTwoWobblesStack.SHOOT_HIGH_AGAIN;
                         autonFunctions.prepShootHighGoalNoHopper();
                     }
                     break;
 
                 case SHOOT_HIGH_AGAIN:
-                    robotMovement.goToPoint(-11, 57, -4, 1, 1.2);
+                    robotMovement.goToPoint(-11, 57, -6, 1, 1.2);
                     if(!(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 1.75))
                         aimTime.reset();
                     else if(aimed)
@@ -237,7 +237,7 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     if(shotsFired < 5)
                         postShotTime.reset();
                     else if(postShotTime.milliseconds() > 250) {
-                        driveState = randomization != Randomization.C ? HighGoalOneWobbleStack.PLACE_WOBBLE : HighGoalOneWobbleStack.APPROACH_WOBBLE;
+                        driveState = randomization != Randomization.C ? HighGoalTwoWobblesStack.PLACE_WOBBLE : HighGoalTwoWobblesStack.APPROACH_WOBBLE;
                         autonFunctions.turnOffIntake();
                     }
                     break;
@@ -246,10 +246,11 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                     autonFunctions.actuallyTurnOffShooter();
                     robotMovement.goToPoint(-11, 200, 0);
                     if(worldPosition.getyPosition() > 70)
-                        driveState = HighGoalOneWobbleStack.PLACE_WOBBLE;
+                        driveState = HighGoalTwoWobblesStack.PLACE_WOBBLE;
                     break;
 
                 case PLACE_WOBBLE:
+                    autonFunctions.actuallyTurnOffShooter();
                     if(randomization == Randomization.A)
                         robotMovement.goToPoint(-14, 58, 58, 1, 1);
                     else if(randomization == Randomization.B)
@@ -261,15 +262,97 @@ public class RedHighGoalOneWobbleStack extends LinearOpMode {
                         autonFunctions.turnOffShooter();
                     }
                     if(robotHardware.wobbleSecure.getPosition() == constants.wobbleSecureOpen)
-                        driveState = HighGoalOneWobbleStack.PARK;
+                        driveState = HighGoalTwoWobblesStack.GO_TO_BACK_OF_FIELD;
+                    break;
+
+                case BACK_FROM_WOBBLE:
+                    if(randomization == Randomization.A)
+                        robotMovement.goToPoint(-14, 61, 56, 1, 1);
+                    else if(randomization == Randomization.B)
+                        robotMovement.goToPoint(-15, 81, -6, 1, 1);
+                    else
+                        robotMovement.goToPoint(-15, 100, 15, 1, 1);
+                    if(robotMovement.getDistanceToPoint() < 4 && robotMovement.getAngleToPreferred() < 4){
+                        autonFunctions.liftWobbleArm();
+                        driveState = HighGoalTwoWobblesStack.GO_TO_BACK_OF_FIELD;
+                    }
+                    break;
+
+                case GO_TO_BACK_OF_FIELD:
+                    if(randomization != Randomization.C)
+                        robotMovement.goToPoint(-15, 0, 0, 5, 1);
+                    else
+                        robotMovement.goToPoint(-20, 0, 5, 5, 1);
+                    if(worldPosition.getyPosition() < 30) {
+                        driveState = HighGoalTwoWobblesStack.GO_TO_SECOND_WOBBLE;
+                        autonFunctions.prepGrabWobble();
+                    }
+                    break;
+
+                case GO_TO_SECOND_WOBBLE:
+                    if(randomization != Randomization.C)
+                        robotMovement.goToPoint(-15, 0, -90, 2, 2);
+                    else
+                        robotMovement.goToPoint(-20, 0, -90, 5, 2);
+                    if(worldPosition.getyPosition() < 25) {
+                        driveState = HighGoalTwoWobblesStack.GRAB_SECOND_WOBBLE;
+                    }
+                    break;
+
+                case GRAB_SECOND_WOBBLE:
+                    if(randomization != Randomization.C)
+                        robotMovement.goToPointMaxPower(-28, 10,-140, 1, 1, .6);
+                    else
+                        robotMovement.goToPointMaxPower(-28, 10, -130, 2, 1, .6);
+                    if(robotMovement.getDistanceToPoint() < 3 && robotMovement.getAngleToPreferred() < 2)
+                        autonFunctions.grabWobble();
+                    if(robotHardware.wobble1.getPosition() == constants.wobble1Holding)
+                        driveState = HighGoalTwoWobblesStack.BACK_FROM_WOBBLE_GRAB;
+                    break;
+
+                case BACK_FROM_WOBBLE_GRAB:
+                    robotMovement.goToPoint(-30, 25, -150, 5, 1);
+                    if(worldPosition.getyPosition() > 18)
+                        driveState = randomization != Randomization.C ? HighGoalTwoWobblesStack.PLACE_SECOND_WOBBLE : HighGoalTwoWobblesStack.APPROACH_SECOND_WOBBLE;
+                    break;
+
+                case APPROACH_SECOND_WOBBLE:
+                    robotMovement.goThroughPoint(-5, 70, 15, 1);
+                    if(worldPosition.getyPosition() > 60)
+                        driveState = HighGoalTwoWobblesStack.PLACE_SECOND_WOBBLE;
+                    break;
+
+                case PLACE_SECOND_WOBBLE:
+                    if(randomization == Randomization.A)
+                        robotMovement.goToPoint(-14, 60, 50, 1, 1);
+                    else if(randomization == Randomization.B)
+                        robotMovement.goToPoint(-22, 81, -15, 1, 1);
+                    else
+                        robotMovement.goToPoint(-5, 107, 25, 1, 1);
+                    if(robotMovement.getDistanceToPoint() < 2 && robotMovement.getAngleToPreferred() < 2) {
+                        autonFunctions.depositWobble();
+                        autonFunctions.turnOffShooter();
+                    }
+                    if(robotHardware.wobbleSecure.getPosition() == constants.wobbleSecureOpen)
+                        driveState = HighGoalTwoWobblesStack.PARK;
+                    break;
+
+                case BACK_FROM_SECOND_WOBBLE:
+                    if(randomization == Randomization.A)
+                        robotMovement.goToPoint(-14, 55, 45, 1, 1);
+                    else if(randomization == Randomization.B)
+                        robotMovement.goToPoint(-15, 81, -6, 1, 1);
+                    else
+                        robotMovement.goToPoint(-15, 100, 15, 1, 1);
+                    if(robotMovement.getDistanceToPoint() < 4 && robotMovement.getAngleToPreferred() < 4){
+                        autonFunctions.liftWobbleArm();
+                        driveState = HighGoalTwoWobblesStack.PARK;
+                    }
                     break;
 
                 case PARK:
                     if(randomization == Randomization.A)
-                        if(totalTime.seconds() > 27)
-                            robotMovement.goToPoint(-30, 70, 0, .75, 1);
-                        else
-                            robotMovement.goToPoint(-30, 45, 0);
+                        robotMovement.goToPoint(-30, 70, 0, .75, 1);
                     else
                         robotMovement.goToPoint(-10, 77, 0, 1, 1);
             }

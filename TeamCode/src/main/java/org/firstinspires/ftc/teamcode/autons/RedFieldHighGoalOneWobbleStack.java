@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autons;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -19,6 +20,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+@Disabled
 @Autonomous(name = "Red Field High Goal One Wobble", group = "BNB")
 public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
     RobotHardware robotHardware = new RobotHardware(this);
@@ -231,6 +233,7 @@ public class RedFieldHighGoalOneWobbleStack extends LinearOpMode {
                     break;
 
                 case PLACE_WOBBLE:
+                    autonFunctions.actuallyTurnOffShooter();
                     if(randomization == Randomization.A)
                         robotMovement.goToPoint(-14, 64, 76, 1, 1);
                     else if(randomization == Randomization.B)
